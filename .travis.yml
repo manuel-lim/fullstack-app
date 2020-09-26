@@ -1,0 +1,19 @@
+language: generic
+sudo: true
+services: docker
+
+before_install:
+  - docker build -t hop586/react-test-app -f ./frontend/Dockerfile.dev ./frontend
+
+script:
+  - docker run -e CI=true hop586/react-test-app npm run test
+
+after_success:
+  - docker build -t hop586/frontend ./frontend
+  - docker build -t hop586/backend ./backend
+  - docker build -t hop586/nginx ./nginx
+  - echo "$DOCKER_HUB_PASSWORD" | docker login -u "$DOCKER_HUB_ID" --password-stdin
+
+  - docker push hop586/frontend
+  - docker push hop586/backend
+  - docker push hop586/nginx
