@@ -17,3 +17,15 @@ after_success:
   - docker push hop586/frontend
   - docker push hop586/backend
   - docker push hop586/nginx
+
+deploy:
+  provider: elasticbeanstalk
+  region: ap-northeast-2
+  app: fullstack-app
+  env: FullstackApp-env
+  bucket_name: elasticbeanstalk-ap-northeast-2-607142215679
+  bucket_path: fullstack-app
+  on:
+    branch: master
+  access_key_id: $AWS_ACCESS_KEY
+  secret_access_key: $AWS_SECRET_ACCESS_KEY
